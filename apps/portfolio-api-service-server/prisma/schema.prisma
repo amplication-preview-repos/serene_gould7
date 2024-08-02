@@ -1,0 +1,53 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model CategoryOfWork {
+  createdAt     DateTime   @default(now())
+  description   String?
+  id            String     @id @default(cuid())
+  name          String?
+  productsItems Products[]
+  updatedAt     DateTime   @updatedAt
+  works         Work[]
+}
+
+model Work {
+  categoryOfWork   CategoryOfWork? @relation(fields: [categoryOfWorkId], references: [id])
+  categoryOfWorkId String?
+  createdAt        DateTime        @default(now())
+  date             DateTime?
+  description      String?
+  id               String          @id @default(cuid())
+  image            Json?
+  title            String?
+  updatedAt        DateTime        @updatedAt
+  url              String?
+}
+
+model Blog {
+  author        String?
+  content       String?
+  createdAt     DateTime  @default(now())
+  id            String    @id @default(cuid())
+  publishedDate DateTime?
+  title         String?
+  updatedAt     DateTime  @updatedAt
+}
+
+model Products {
+  categoryOfWork   CategoryOfWork? @relation(fields: [categoryOfWorkId], references: [id])
+  categoryOfWorkId String?
+  createdAt        DateTime        @default(now())
+  description      String?
+  id               String          @id @default(cuid())
+  image            Json?
+  name             String?
+  price            Float?
+  updatedAt        DateTime        @updatedAt
+}
